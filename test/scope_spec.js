@@ -87,4 +87,39 @@ describe('digest', function() {
     expect(oldValueGiven).toBe(123);
   });
 
+  it('may have watchers that omit the listener function', function() {
+    var watchFn = jasmine.createSpy().and.returnValue('something');
+    scope.$watch(watchFn);
+
+    scope.$digest();
+    expect(watchFn).toHaveBeenCalled();
+  });
+
+  it('triggers chained watchers in the same digest', function() {
+    scope.name = 'Ji';
+
+    scope.$watch(
+      function(scope) { return scope.nameUpper; },
+      function(newValue, oldValue, scope) {
+        if (newValue) {
+          scope.initial = newValue.substring(0, 1) + '.';
+        }
+      }
+    );
+    scope.$watch(
+      function(scope) { return scope.name; },
+      function(newValue, oldValue, scope) {
+        if (newValue) {
+          scope.nameUpper = newValue.toUpperCase();
+        }
+      }
+    );
+
+    scope.$digest();
+    expect(scope.initial).toBe('J.');
+
+    scope.name = 'Wu';
+    scope.$digest();
+    expect(scope.initial).toBe('W.');
+  });
 });

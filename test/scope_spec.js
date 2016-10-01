@@ -187,4 +187,24 @@ describe('digest', function() {
     expect(scope.counter).toBe(1);
   });
 
+  it('calls the listener function when watched array changes (when the flag turned on)', function() {
+    scope.aArray = [1, 2, 3];
+    scope.counter = 0;
+
+    scope.$watch(
+      function(scope) { return scope.aArray; },
+      function(newValue, oldValue, scope) {
+        scope.counter++;
+      },
+      true // flag
+    );
+
+    scope.$digest();
+    expect(scope.counter).toBe(1);
+    
+    scope.aArray.push(4);
+    scope.$digest();
+    expect(scope.counter).toBe(2);
+  });
+
 });

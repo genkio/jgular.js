@@ -321,3 +321,29 @@ describe('digest', function() {
   // skip 'allows destroying several $watches during digest'
 
 });
+
+describe('$eval', function() {
+  var scope;
+
+  beforeEach(function() {
+    scope = new Scope();
+  });
+
+  it('executes $evaled function and returns result', function() {
+    scope.aValue = 42;
+
+    var result = scope.$eval(function(scope) {
+      return scope.aValue;
+    });
+  });
+
+  it('passes the second $eval argument straight through', function() {
+    scope.aValue = 42;
+
+    var result = scope.$eval(function(scope, arg) {
+      return scope.aValue + arg;
+    }, 2);
+
+    expect(result).toBe(44);
+  });
+});

@@ -431,4 +431,23 @@ describe('$evalAsync', function() {
   // skip 'executes $evalAsynced functions added by watch functions'
   // skip 'executes $evalAsynced functions even when not dirty'
   // skip 'eventually halts $evalAsyncs added by watches'
+
+  it('schedules a digest in $evalAsync', function(done) {
+    scope.aValue = 'abc';
+    scope.counter = 0;
+
+    scope.$watch(
+      function(scope) { return scope.aValue; },
+      function(newValue, oldValue, scope) {
+        scope.counter++;
+      }
+    );
+
+    scope.$evalAsync(function(scope) { });
+    expect(scope.counter).toBe(0);
+    setTimeout(function() {
+      expect(scope.counter).toBe(1);
+      done();
+    }, 50);
+  });
 });

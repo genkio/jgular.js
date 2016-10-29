@@ -8,6 +8,8 @@ function Scope() {
   this.$$watchers = [];
   this.$$lastDirtyWatch = null;
   this.$$asyncQueue = [];
+  this.$$applyAsyncQueue = [];
+  this.$$applyAsyncId = null;
   this.$$phase = null;
 }
 
@@ -118,6 +120,24 @@ Scope.prototype.$evalAsync = function(expr) {
     }, 0);
   }
   this.$$asyncQueue.push({scope: this, expression: expr});
+};
+
+Scope.prototype.$applyAsync = function(expr) {
+  var self = this;
+  self.$$applyAsyncQueue.push(function() {
+    self.$eval(expr);
+  });
+  if (self.$$applyAsyncId === null) {
+    self.$$applyAsyncId = setTimeout(function() {
+      // $apply once outside the loop to digest only once
+      self.$apply(function() { 
+        while (self.$$applyAsyncQueue.length) {
+          self.$$applyAsyncQueue.shift()();
+        }
+        self.$$applyAsyncId = null;
+      });
+    }, 0);
+  }
 };
 
 module.exports = Scope;

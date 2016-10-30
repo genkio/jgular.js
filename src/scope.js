@@ -82,6 +82,12 @@ Scope.prototype.$digest = function() {
   var dirty;
   this.$$lastDirtyWatch = null;
   this.$beginPhase('$digest');
+
+  if (this.$$applyAsyncId) {
+    clearTimeout(this.$$applyAsyncId);
+    this.$$flushApplyAsync();
+  }
+
   do {
     while(this.$$asyncQueue.length) {
       var asyncTask = this.$$asyncQueue.shift();
@@ -122,6 +128,13 @@ Scope.prototype.$evalAsync = function(expr) {
   this.$$asyncQueue.push({scope: this, expression: expr});
 };
 
+Scope.prototype.$$flushApplyAsync = function() {
+  while (this.$$applyAsyncQueue.length) {
+    this.$$applyAsyncQueue.shift()();
+  }
+  this.$$applyAsyncId = null;
+};
+
 Scope.prototype.$applyAsync = function(expr) {
   var self = this;
   self.$$applyAsyncQueue.push(function() {
@@ -130,12 +143,7 @@ Scope.prototype.$applyAsync = function(expr) {
   if (self.$$applyAsyncId === null) {
     self.$$applyAsyncId = setTimeout(function() {
       // $apply once outside the loop to digest only once
-      self.$apply(function() { 
-        while (self.$$applyAsyncQueue.length) {
-          self.$$applyAsyncQueue.shift()();
-        }
-        self.$$applyAsyncId = null;
-      });
+      self.$apply(_.bind(self.$$flushApplyAsync, self));
     }, 0);
   }
 };

@@ -90,8 +90,12 @@ Scope.prototype.$digest = function() {
 
   do {
     while(this.$$asyncQueue.length) {
-      var asyncTask = this.$$asyncQueue.shift();
-      asyncTask.scope.$eval(asyncTask.expression);
+      try {
+        var asyncTask = this.$$asyncQueue.shift();
+        asyncTask.scope.$eval(asyncTask.expression);
+      } catch(e) {
+        console.error(e);
+      }
     }
     dirty = this.$$digestOnce();
     if (dirty && !(ttl--)) {

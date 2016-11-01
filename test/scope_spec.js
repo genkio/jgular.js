@@ -450,6 +450,27 @@ describe('$evalAsync', function() {
       done();
     }, 50);
   });
+
+  it('catches exceptions in $evalAsync', function(done) {
+    scope.aValue = 'abc';
+    scope.counter = 0;
+
+    scope.$watch(
+      function(scope) { return scope.aValue; },
+      function(newValue, oldValue, scope) {
+        scope.counter++;
+      }
+    );
+
+    scope.$evalAsync(function(scope) {
+      throw 'Error';
+    });
+
+    setTimeout(function() {
+      expect(scope.counter).toBe(1);
+      done();
+    }, 50);
+  });
 });
 
 describe('$applyAsync', function() {
@@ -560,4 +581,7 @@ describe('$applyAsync', function() {
   });
 
 });
+
+// skip $$postDigest
+
 

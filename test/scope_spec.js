@@ -580,6 +580,23 @@ describe('$applyAsync', function() {
     }, 50);
   });
 
+  it('catches exceptions in $applyAsync', function(done) {
+    scope.$applyAsync(function(scope) {
+      throw 'Error';
+    });
+    scope.$applyAsync(function(scope) {
+      throw 'Error';
+    });
+
+    scope.$applyAsync(function(scope) {
+      scope.applied = true;
+    });
+
+    setTimeout(function() {
+      expect(scope.applied).toBe(true);
+      done();
+    }, 50);
+  });
 });
 
 // skip $$postDigest

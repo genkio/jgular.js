@@ -29,4 +29,9 @@ describe('parse', function() {
     expect(fn()).toEqual('abc');
   });
 
+  it('can parse null', function() {
+    var fn = parse('null');
+    expect(fn()).toBe(null);
+  });
+
 });

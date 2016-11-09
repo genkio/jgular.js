@@ -34,4 +34,14 @@ describe('parse', function() {
     expect(fn()).toBe(null);
   });
 
+  it('can parse true', function() {
+    var fn = parse('true');
+    expect(fn()).toBe(true);
+  });
+
+  it('can parse false', function() {
+    var fn = parse('false');
+    expect(fn()).toBe(false);
+  });
+
 });

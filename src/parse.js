@@ -166,7 +166,9 @@ AST.prototype.constant = function() {
 };
 
 AST.prototype.constants = {
-  'null': {type: AST.Literal, value: null}
+  'null': {type: AST.Literal, value: null},
+  'true': {type: AST.Literal, value: true},
+  'false': {type: AST.Literal, value: false}
 };
 
 

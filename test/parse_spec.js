@@ -44,4 +44,9 @@ describe('parse', function() {
     expect(fn()).toBe(false);
   });
 
+  it('ignores whitespace', function() {
+    var fn = parse(' \n42 ');
+    expect(fn()).toBe(42);
+  });
+
 });

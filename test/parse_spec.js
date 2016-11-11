@@ -49,4 +49,9 @@ describe('parse', function() {
     expect(fn()).toBe(42);
   });
 
+  it('can parse an empty array', function() {
+    var fn = parse('[]');
+    expect(fn()).toEqual([]);
+  });
+
 });

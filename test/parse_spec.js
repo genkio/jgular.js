@@ -54,4 +54,9 @@ describe('parse', function() {
     expect(fn()).toEqual([]);
   });
 
+  it('can parse a non-empty array', function() {
+    var fn = parse('[1, "two", [3], true]');
+    expect(fn()).toEqual([1, 'two', [3], true]);
+  });
+
 });

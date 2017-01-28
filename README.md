@@ -4,3 +4,4 @@ Features implemented so far
 ---
 - Basic dirty-checking system in terms of $watch and $digest.
 - Several scope methods ($eval, $apply, $evalAsync and $applyAsync) that can access scopes to evaluate code and to cause dirty-checking to be triggered.
+- Expression parser (with Lexing, AST building, and AST compilation) that turns expression strings into functions.

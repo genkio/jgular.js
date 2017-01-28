@@ -2,4 +2,5 @@
 
 Features implemented so far
 ---
-- Scopes and Dirty-Checking
+- Basic dirty-checking system in terms of $watch and $digest.
+- Several scope methods ($eval, $apply, $evalAsync and $applyAsync) that can access scopes to evaluate code and to cause dirty-checking to be triggered.
